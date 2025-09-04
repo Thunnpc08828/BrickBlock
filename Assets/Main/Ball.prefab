@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 5401514375203797044}
   - component: {fileID: 5179173960302992926}
   m_Layer: 0
-  m_Name: Marbles
-  m_TagString: Untagged
+  m_Name: Ball
+  m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -161,3 +161,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98e29bed8440c34f82255b5bc8edb8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  constantSpeed: 23

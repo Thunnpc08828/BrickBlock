@@ -4,6 +4,7 @@ public class BallSpawner : MonoBehaviour
 {
     public GameObject ball;
     public float ballSpeed = 10f;
+    public LineRenderer aimLine;      // LineRenderer ð? v? tia ng?m
 
     private Vector2 shootDirection;
     private bool isAiming = false;
@@ -13,27 +14,33 @@ public class BallSpawner : MonoBehaviour
     {
         if (!isReady) return;
 
-        // Nh?n chu?t ð? ng?m
         if (Input.GetMouseButtonDown(0))
         {
             isAiming = true;
+            aimLine.enabled = true; // b?t tia ng?m
         }
 
-        // Trong khi gi? chu?t -> xác ð?nh hý?ng
         if (isAiming)
         {
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 direction = (mouseWorldPos - ball.transform.position); // ? hý?ng t? bóng hi?n t?i
+            Vector2 direction = (mouseWorldPos - ball.transform.position);
             direction.Normalize();
-
             shootDirection = direction;
-            Debug.DrawRay(ball.transform.position, shootDirection * 5, Color.green);
+
+            float offset = 0.6f; // kho?ng cách ðý?ng ng?m tách kh?i bóng
+            float lineLength = 5f; // chi?u dài ðý?ng ng?m
+
+            Vector2 startPos = (Vector2)ball.transform.position + direction * offset;
+            Vector2 endPos = startPos + direction * lineLength;
+
+            aimLine.SetPosition(0, startPos);
+            aimLine.SetPosition(1, endPos);
         }
 
-        // Th? chu?t -> b?n
         if (Input.GetMouseButtonUp(0) && isAiming)
         {
             isAiming = false;
+            aimLine.enabled = false; // t?t tia ng?m
             ShootBall();
         }
     }
@@ -45,11 +52,15 @@ public class BallSpawner : MonoBehaviour
         isReady = false;
     }
 
-    // G?i khi bóng ch?m "below"
-    public void ReadyBall()
+    // Gi? bóng t?i v? trí rõi, không ð?ng t?i spawner
+    public void ReadyBall(Vector2 newPosition)
     {
         Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
-        rb.velocity = Vector2.zero; // d?ng l?i t?i ch?
-        isReady = true;             // cho phép b?n ti?p
+        rb.velocity = Vector2.zero;
+
+        // ð?t bóng v? ðúng ch? nó rõi
+        ball.transform.position = newPosition;
+
+        isReady = true;
     }
 }

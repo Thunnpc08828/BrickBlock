@@ -3,14 +3,12 @@ using TMPro; // Dùng TextMeshPro
 
 public class Block : MonoBehaviour
 {
-    public int health = 3; // Máu kh?i t?o
-    private TextMeshProUGUI healthText;
+    [SerializeField] private int _health = 1;
+    [SerializeField] private TextMeshPro _tmpHealth;
 
     void Start()
     {
-        // L?y text con bên trong block
-        healthText = GetComponentInChildren<TextMeshProUGUI>();
-        UpdateHealthText();
+        _tmpHealth.text = _health.ToString();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -23,20 +21,12 @@ public class Block : MonoBehaviour
 
     void TakeDamage(int amount)
     {
-        health -= amount;
-        UpdateHealthText();
+        _health -= amount;
+        _tmpHealth.text = _health.ToString();
 
-        if (health <= 0)
+        if (_health <= 0)
         {
-            Destroy(gameObject); // Khi mau ve 0 block bien mat
-        }
-    }
-
-    void UpdateHealthText()
-    {
-        if (healthText != null)
-        {
-            healthText.text = health.ToString();
+            Destroy(gameObject);
         }
     }
 }

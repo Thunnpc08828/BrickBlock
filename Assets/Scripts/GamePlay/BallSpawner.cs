@@ -16,8 +16,8 @@ public class BallSpawner : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            isAiming = true;
-            aimLine.enabled = true; // b?t tia ng?m
+            isAiming = true; //trang thai ngam
+            aimLine.enabled = true; // hien thi duong ngam
         }
 
         if (isAiming)
@@ -27,8 +27,8 @@ public class BallSpawner : MonoBehaviour
             direction.Normalize();
             shootDirection = direction;
 
-            float offset = 0.6f; // kho?ng cách ðý?ng ng?m tách kh?i bóng
-            float lineLength = 5f; // chi?u dài ðý?ng ng?m
+            float offset = 0.6f; // khoang cach ðuong ngam tach khoi bóng
+            float lineLength = 5f; // chieu dai ðuong ngam
 
             Vector2 startPos = (Vector2)ball.transform.position + direction * offset;
             Vector2 endPos = startPos + direction * lineLength;
@@ -40,7 +40,7 @@ public class BallSpawner : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && isAiming)
         {
             isAiming = false;
-            aimLine.enabled = false; // t?t tia ng?m
+            aimLine.enabled = false; 
             ShootBall();
         }
     }
@@ -52,13 +52,11 @@ public class BallSpawner : MonoBehaviour
         isReady = false;
     }
 
-    // Gi? bóng t?i v? trí rõi, không ð?ng t?i spawner
     public void ReadyBall(Vector2 newPosition)
     {
         Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
         rb.velocity = Vector2.zero;
 
-        // ð?t bóng v? ðúng ch? nó rõi
         ball.transform.position = newPosition;
 
         isReady = true;

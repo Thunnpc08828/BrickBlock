@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Below : MonoBehaviour
+public class WallBottom : MonoBehaviour
 {
     private BallSpawner spawner;
     private BlockSpawner blockSpawner;

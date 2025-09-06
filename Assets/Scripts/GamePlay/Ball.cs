@@ -6,16 +6,15 @@ public class Ball : MonoBehaviour
     [SerializeField] private float ballSpeed = 10f;     // shoot speed
     [SerializeField] private LineRenderer aimLine;      // assign in prefab/inspector
 
-    private Rigidbody2D rb;
+    [SerializeField] private Rigidbody2D rb;
     private Vector2 shootDirection;
     private bool isAiming = false;
     private bool isReady = true;
 
+
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
 
-        if (aimLine == null) aimLine = GetComponentInChildren<LineRenderer>();
     }
 
     void Update()

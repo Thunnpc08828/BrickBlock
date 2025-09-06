@@ -4,13 +4,13 @@ using UnityEngine;
 public class WallBottom : MonoBehaviour
 {
     private BallSpawner spawner;
-    private BlockSpawner blockSpawner;
+    private LevelManager blockSpawner;
     private bool handling = false;
 
     void Start()
     {
         spawner = FindObjectOfType<BallSpawner>();
-        blockSpawner = FindObjectOfType<BlockSpawner>();
+        blockSpawner = FindObjectOfType<LevelManager>();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -39,7 +39,7 @@ public class WallBottom : MonoBehaviour
 
         if (GameObject.FindGameObjectsWithTag("Block").Length == 0 && blockSpawner != null)
         {
-            blockSpawner.SpawnBlocks();
+            blockSpawner.SpawnBlock();
         }
     }
 

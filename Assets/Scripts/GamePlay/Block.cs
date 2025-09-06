@@ -1,14 +1,17 @@
 using UnityEngine;
-using TMPro; 
+using TMPro;
+using Sirenix.OdinInspector;
 public class Block : MonoBehaviour
 {
-    [SerializeField] private int _health = 1;
     [SerializeField] private TextMeshPro _tmpHealth;
+    public BlockData BlockData;
 
-    void Start()
+    public void Setup(BlockData blockData)
     {
-        _tmpHealth.text = _health.ToString();
+        BlockData = blockData;
+        _tmpHealth.text = BlockData.Health.ToString();
     }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -20,12 +23,18 @@ public class Block : MonoBehaviour
 
     void TakeDamage(int amount)
     {
-        _health -= amount;
-        _tmpHealth.text = _health.ToString();
+        BlockData.Health -= amount;
+        _tmpHealth.text = BlockData.Health.ToString();
 
-        if (_health <= 0)
+        if (BlockData.Health <= 0)
         {
             Destroy(gameObject);
         }
+    }
+
+    [Button]
+    private void UpdateHealth()
+    {
+        _tmpHealth.text = BlockData.Health.ToString();
     }
 }

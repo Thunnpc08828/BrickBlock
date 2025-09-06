@@ -1,6 +1,5 @@
 using UnityEngine;
-using TMPro; // Dùng TextMeshPro
-
+using TMPro; 
 public class Block : MonoBehaviour
 {
     [SerializeField] private int _health = 1;

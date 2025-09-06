@@ -150,7 +150,7 @@ Transform:
   m_GameObject: {fileID: 86576440}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.41000003, y: -11.210001, z: -0.1386005}
+  m_LocalPosition: {x: -0.41000003, y: -8.19, z: -0.1386005}
   m_LocalScale: {x: 200, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -241,8 +241,8 @@ Transform:
   m_GameObject: {fileID: 244344896}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.74, y: -10, z: 0}
-  m_LocalScale: {x: 3, y: 200, z: 1}
+  m_LocalPosition: {x: 5.3, y: -13.3, z: 0}
+  m_LocalScale: {x: 3, y: 120, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 929758266}
@@ -451,8 +451,8 @@ Transform:
   m_GameObject: {fileID: 319825308}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.41000003, y: -11.210001, z: -0.1386005}
-  m_LocalScale: {x: 200, y: 3, z: 1}
+  m_LocalPosition: {x: 0, y: -8.15, z: -0.1386005}
+  m_LocalScale: {x: 80, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -582,9 +582,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c64db57aa68b10e4282c97c8e7eaaeeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 358944299687606267}
-  ballSpeed: 23
-  aimLine: {fileID: 319825315}
+  ballPrefab: {fileID: 358944299687606267}
+  spawnPoint: {fileID: 319825311}
 --- !u!1 &432695652
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,8 +612,8 @@ Transform:
   m_GameObject: {fileID: 432695652}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4, z: 0}
-  m_LocalScale: {x: 200, y: 3, z: 1}
+  m_LocalPosition: {x: 0.78, y: -5.32, z: 0}
+  m_LocalScale: {x: 80, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 929758266}
@@ -756,12 +755,24 @@ PrefabInstance:
       value: Ball
       objectReference: {fileID: 0}
     - target: {fileID: 3366223878888706361, guid: edab72bdc7f762e4dbc84180aa3fa084, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3366223878888706361, guid: edab72bdc7f762e4dbc84180aa3fa084, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3366223878888706361, guid: edab72bdc7f762e4dbc84180aa3fa084, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3366223878888706361, guid: edab72bdc7f762e4dbc84180aa3fa084, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3366223878888706361, guid: edab72bdc7f762e4dbc84180aa3fa084, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.172679
+      value: -7.5
       objectReference: {fileID: 0}
     - target: {fileID: 3366223878888706361, guid: edab72bdc7f762e4dbc84180aa3fa084, type: 3}
       propertyPath: m_LocalPosition.z
@@ -796,8 +807,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5179173960302992926, guid: edab72bdc7f762e4dbc84180aa3fa084, type: 3}
+      propertyPath: aimLine
+      value: 
+      objectReference: {fileID: 319825315}
+    - target: {fileID: 5179173960302992926, guid: edab72bdc7f762e4dbc84180aa3fa084, type: 3}
+      propertyPath: ballSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5179173960302992926, guid: edab72bdc7f762e4dbc84180aa3fa084, type: 3}
       propertyPath: constantSpeed
-      value: 25
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -839,7 +858,7 @@ Camera:
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -865,17 +884,17 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15
-  m_Depth: -1
+  orthographic size: 8
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
-  m_TargetEye: 0
+  m_TargetEye: 3
   m_HDR: 1
-  m_AllowMSAA: 0
+  m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 0
@@ -890,7 +909,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.3, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -925,11 +944,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a54636724bdaf2748a7127279d55ba29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  X: 8
+  Y: 4
   blockPrefab: {fileID: 1482704010993267791, guid: b00b901e167d7f74e85ae062f7505762, type: 3}
-  blockCount: 3
-  spawnAreaMin: {x: -12, y: 1}
-  spawnAreaMax: {x: 11, y: 15}
-  minDistance: 1
+  marginTop: 0.8
+  marginSide: 0.8
+  blockAreaHeight: 3.5
 --- !u!4 &896683298
 Transform:
   m_ObjectHideFlags: 0
@@ -939,7 +959,7 @@ Transform:
   m_GameObject: {fileID: 896683296}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.3587737, y: 1.2173197, z: -0.357373}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1075,8 +1095,8 @@ Transform:
   m_GameObject: {fileID: 1951127944}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.82, y: -10, z: 0}
-  m_LocalScale: {x: 3, y: 200, z: 1}
+  m_LocalPosition: {x: -3.68, y: -13.35, z: 0}
+  m_LocalScale: {x: 3, y: 120, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 929758266}
@@ -1218,6 +1238,6 @@ SceneRoots:
   - {fileID: 507531644}
   - {fileID: 929758266}
   - {fileID: 319825311}
+  - {fileID: 86576441}
   - {fileID: 896683298}
   - {fileID: 1786494295}
-  - {fileID: 86576441}

@@ -2,63 +2,62 @@ using UnityEngine;
 
 public class BallSpawner : MonoBehaviour
 {
-    public GameObject ball;
-    public float ballSpeed = 10f;
-    public LineRenderer aimLine;      // LineRenderer ð? v? tia ng?m
+    [SerializeField] private GameObject ballPrefab; // assign in Inspector (prefab)
+    [SerializeField] private Transform spawnPoint;  // assign in Inspector (empty transform)
 
-    private Vector2 shootDirection;
-    private bool isAiming = false;
-    private bool isReady = true;
+    private GameObject currentBall;
 
-    void Update()
+    void Start()
     {
-        if (!isReady) return;
-
-        if (Input.GetMouseButtonDown(0))
+        var existing = GameObject.FindWithTag("Ball");
+        if (existing != null)
         {
-            isAiming = true; //trang thai ngam
-            aimLine.enabled = true; // hien thi duong ngam
+            currentBall = existing;
+
+            var b = currentBall.GetComponent<Ball>();
+            if (b != null) b.SetReady(true);
+            return;
         }
 
-        if (isAiming)
+        if (ballPrefab != null)
         {
-            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 direction = (mouseWorldPos - ball.transform.position);
-            direction.Normalize();
-            shootDirection = direction;
-
-            float offset = 0.6f; // khoang cach ðuong ngam tach khoi bóng
-            float lineLength = 5f; // chieu dai ðuong ngam
-
-            Vector2 startPos = (Vector2)ball.transform.position + direction * offset;
-            Vector2 endPos = startPos + direction * lineLength;
-
-            aimLine.SetPosition(0, startPos);
-            aimLine.SetPosition(1, endPos);
+            Vector2 pos = spawnPoint != null ? (Vector2)spawnPoint.position : (Vector2)transform.position;
+            SpawnBall(pos);
         }
-
-        if (Input.GetMouseButtonUp(0) && isAiming)
+        else
         {
-            isAiming = false;
-            aimLine.enabled = false; 
-            ShootBall();
+            Debug.LogError("BallSpawner: ballPrefab not assigned in Inspector.");
         }
     }
 
-    void ShootBall()
+    private void SpawnBall(Vector2 position)
     {
-        Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
-        rb.velocity = shootDirection * ballSpeed;
-        isReady = false;
+        currentBall = Instantiate(ballPrefab, position, Quaternion.identity);
+        currentBall.tag = "Ball"; 
+        var b = currentBall.GetComponent<Ball>();
+        if (b != null) b.SetReady(true);
     }
 
     public void ReadyBall(Vector2 newPosition)
     {
-        Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
-        rb.velocity = Vector2.zero;
+        if (ballPrefab == null && currentBall == null)
+        {
+            Debug.LogError("BallSpawner: no ballPrefab and no currentBall.");
+            return;
+        }
 
-        ball.transform.position = newPosition;
+        if (currentBall == null)
+        {
+            SpawnBall(newPosition);
+            return;
+        }
 
-        isReady = true;
+        Rigidbody2D rb = currentBall.GetComponent<Rigidbody2D>();
+        if (rb != null) rb.velocity = Vector2.zero;
+
+        currentBall.transform.position = newPosition;
+
+        var ballScript = currentBall.GetComponent<Ball>();
+        if (ballScript != null) ballScript.SetReady(true);
     }
 }

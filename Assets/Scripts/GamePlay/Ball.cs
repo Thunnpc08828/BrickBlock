@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    [SerializeField] private float constantSpeed = 10f; // keep speed constant
-    [SerializeField] private float ballSpeed = 10f;     // shoot speed
-    [SerializeField] private LineRenderer aimLine;      // assign in prefab/inspector
+    [SerializeField] private float _constantSpeed = 10f; // keep speed constant
+    [SerializeField] private float _ballSpeed = 10f;     // shoot speed
+    [SerializeField] private LineRenderer _aimLine;      // assign in prefab/inspector
 
     [SerializeField] private Rigidbody2D rb;
     private Vector2 shootDirection;
@@ -24,7 +24,7 @@ public class Ball : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             isAiming = true;
-            if (aimLine != null) aimLine.enabled = true;
+            if (_aimLine != null) _aimLine.enabled = true;
         }
 
         if (isAiming)
@@ -39,17 +39,17 @@ public class Ball : MonoBehaviour
             Vector2 startPos = (Vector2)transform.position + direction * offset;
             Vector2 endPos = startPos + direction * lineLength;
 
-            if (aimLine != null)
+            if (_aimLine != null)
             {
-                aimLine.SetPosition(0, startPos);
-                aimLine.SetPosition(1, endPos);
+                _aimLine.SetPosition(0, startPos);
+                _aimLine.SetPosition(1, endPos);
             }
         }
 
         if (Input.GetMouseButtonUp(0) && isAiming)
         {
             isAiming = false;
-            if (aimLine != null) aimLine.enabled = false;
+            if (_aimLine != null) _aimLine.enabled = false;
             ShootBall();
         }
     }
@@ -59,14 +59,14 @@ public class Ball : MonoBehaviour
         // after shot, keep a constant speed
         if (!isReady && rb != null && rb.velocity != Vector2.zero)
         {
-            rb.velocity = constantSpeed * (rb.velocity.normalized);
+            rb.velocity = _constantSpeed * (rb.velocity.normalized);
         }
     }
 
     void ShootBall()
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
-        rb.velocity = shootDirection * ballSpeed;
+        rb.velocity = shootDirection * _ballSpeed;
         isReady = false;
     }
 

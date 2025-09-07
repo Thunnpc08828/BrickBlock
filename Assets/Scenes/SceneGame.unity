@@ -151,7 +151,7 @@ Transform:
   m_GameObject: {fileID: 86576440}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.02, y: -8.19, z: -0.1386005}
+  m_LocalPosition: {x: 0.01, y: -8.19, z: -0.1386005}
   m_LocalScale: {x: 9.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -169,6 +169,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6086ec8a2f6712449a1cb00f14cb9a7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spawner: {fileID: 0}
+  _blockSpawner: {fileID: 0}
+  _handling: 0
 --- !u!61 &86576444
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -469,7 +472,7 @@ Transform:
   m_GameObject: {fileID: 432695652}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.7, y: 8, z: 0}
+  m_LocalPosition: {x: 0.8, y: 8, z: 0}
   m_LocalScale: {x: 9.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -793,8 +796,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2b2e0eda5d83e84ca63663a84d5cccd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _x: 10
-  _y: 6
+  _x: 8
+  _y: 4
   _blockContainer: {fileID: 2046683286}
   _blockPrefab: {fileID: 5167467391407695477, guid: b00b901e167d7f74e85ae062f7505762, type: 3}
   _levelData:

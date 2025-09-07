@@ -3,22 +3,22 @@ using UnityEngine;
 
 public class WallBottom : MonoBehaviour
 {
-    private BallSpawner spawner;
-    private LevelManager blockSpawner;
-    private bool handling = false;
+    [SerializeField] private BallSpawner _spawner;
+    [SerializeField] private LevelManager _blockSpawner;
+    [SerializeField] private bool _handling = false;
 
     void Start()
     {
-        spawner = FindObjectOfType<BallSpawner>();
-        blockSpawner = FindObjectOfType<LevelManager>();
+        _spawner = FindObjectOfType<BallSpawner>();
+        _blockSpawner = FindObjectOfType<LevelManager>();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (!collision.gameObject.CompareTag("Ball")) return;
-        if (handling) return; 
+        if (_handling) return; 
 
-        handling = true;
+        _handling = true;
         StartCoroutine(ResetHandling());
 
         Vector2 contactPoint = collision.GetContact(0).point;
@@ -35,17 +35,17 @@ public class WallBottom : MonoBehaviour
 
         Vector2 newPos = contactPoint + Vector2.up * (ballHalf + bottomHalf + gap);
 
-        if (spawner != null) spawner.ReadyBall(newPos);
+        if (_spawner != null) _spawner.ReadyBall(newPos);
 
-        if (GameObject.FindGameObjectsWithTag("Block").Length == 0 && blockSpawner != null)
+        if (GameObject.FindGameObjectsWithTag("Block").Length == 0 && _blockSpawner != null)
         {
-            blockSpawner.SpawnBlock();
+            _blockSpawner.SpawnBlock();
         }
     }
 
     IEnumerator ResetHandling()
     {
         yield return new WaitForSeconds(0.06f);
-        handling = false;
+        _handling = false;
     }
 }

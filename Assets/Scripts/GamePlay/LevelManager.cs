@@ -73,5 +73,44 @@ public class LevelManager : MonoBehaviour
     private void LoadLevel(int level)
     {
         Debug.Log("Load level: " + level);
+
+        DeleteBlock();
+
+        var path = Application.dataPath + $"/Resources/LevelData/{level}.json";
+        if (!File.Exists(path))
+        {
+            Debug.LogError("File not found: " + path);
+            return;
+        }
+
+        var json = File.ReadAllText(path);
+        _levelData = JsonConvert.DeserializeObject<LevelData>(json);
+
+        if (_levelData == null || _levelData.BlockDataArry == null)
+        {
+            Debug.LogError("Error: level data null!");
+            return;
+        }
+
+        _blockDataArray = _levelData.BlockDataArry;
+        int cols = _blockDataArray.GetLength(0); // X
+        int rows = _blockDataArray.GetLength(1); // Y
+
+        for (int i = 0; i < rows; i++) // Y
+        {
+            for (int j = 0; j < cols; j++) // X
+            {
+                var data = _blockDataArray[j, i];
+                if (data == null || data.Type == BlockType.Empty) continue;
+
+                var block = Instantiate(_blockPrefab, _blockContainer.transform);
+                block.Setup(data);
+
+                block.transform.localPosition = new Vector2(j, i);
+
+                block.name = $"Block_{j}_{i}";
+            }
+        }
+        Debug.Log($"Load level {level} total blocks: {cols * rows}");
     }
 }

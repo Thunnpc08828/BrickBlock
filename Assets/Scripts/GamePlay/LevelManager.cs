@@ -13,7 +13,6 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private BlockData[,] _blockDataArray;
     [SerializeField] private LevelData _levelData;
 
-  
 
     [Button]
     public void SpawnBlock()
@@ -96,21 +95,23 @@ public class LevelManager : MonoBehaviour
         int cols = _blockDataArray.GetLength(0); // X
         int rows = _blockDataArray.GetLength(1); // Y
 
-        for (int i = 0; i < rows; i++) // Y
+        for (int i = 0; i < rows; i++)
         {
-            for (int j = 0; j < cols; j++) // X
+            for (int j = 0; j < cols; j++) 
             {
-                var data = _blockDataArray[j, i];
-                if (data == null || data.Type == BlockType.Empty) continue;
+                var data = _blockDataArray[j, i]; 
+                if (data == null || data.Type == BlockType.Empty)
+                {
+                    continue;
+                }
 
                 var block = Instantiate(_blockPrefab, _blockContainer.transform);
                 block.Setup(data);
-
                 block.transform.localPosition = new Vector2(j, i);
-
                 block.name = $"Block_{j}_{i}";
             }
         }
+
         Debug.Log($"Load level {level} total blocks: {cols * rows}");
     }
 }

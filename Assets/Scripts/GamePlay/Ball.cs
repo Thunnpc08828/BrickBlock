@@ -6,10 +6,10 @@ public class Ball : MonoBehaviour
     [SerializeField] private float _ballSpeed = 10f;     // shoot speed
     [SerializeField] private LineRenderer _aimLine;      // assign in prefab/inspector
 
-    [SerializeField] private Rigidbody2D rb;
-    private Vector2 shootDirection;
-    private bool isAiming = false;
-    private bool isReady = true;
+    [SerializeField] private Rigidbody2D _rb;
+    [SerializeField] private Vector2 _shootDirection;
+    [SerializeField] private bool _isAiming = false;
+    [SerializeField] private bool _isReady = true;
 
 
     void Start()
@@ -19,20 +19,20 @@ public class Ball : MonoBehaviour
 
     void Update()
     {
-        if (!isReady) return;
+        if (!_isReady) return;
 
         if (Input.GetMouseButtonDown(0))
         {
-            isAiming = true;
+            _isAiming = true;
             if (_aimLine != null) _aimLine.enabled = true;
         }
 
-        if (isAiming)
+        if (_isAiming)
         {
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 direction = (mouseWorldPos - transform.position);
             direction.Normalize();
-            shootDirection = direction;
+            _shootDirection = direction;
 
             float offset = 0.6f;
             float lineLength = 5f;
@@ -46,9 +46,9 @@ public class Ball : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0) && isAiming)
+        if (Input.GetMouseButtonUp(0) && _isAiming)
         {
-            isAiming = false;
+            _isAiming = false;
             if (_aimLine != null) _aimLine.enabled = false;
             ShootBall();
         }
@@ -57,25 +57,25 @@ public class Ball : MonoBehaviour
     void FixedUpdate()
     {
         // after shot, keep a constant speed
-        if (!isReady && rb != null && rb.velocity != Vector2.zero)
+        if (!_isReady && _rb != null && _rb.velocity != Vector2.zero)
         {
-            rb.velocity = _constantSpeed * (rb.velocity.normalized);
+            _rb.velocity = _constantSpeed * (_rb.velocity.normalized);
         }
     }
 
     void ShootBall()
     {
-        if (rb == null) rb = GetComponent<Rigidbody2D>();
-        rb.velocity = shootDirection * _ballSpeed;
-        isReady = false;
+        if (_rb == null) _rb = GetComponent<Rigidbody2D>();
+        _rb.velocity = _shootDirection * _ballSpeed;
+        _isReady = false;
     }
 
     public void SetReady(bool ready)
     {
-        isReady = ready;
-        if (ready && rb != null)
+        _isReady = ready;
+        if (ready && _rb != null)
         {
-            rb.velocity = Vector2.zero;
+            _rb.velocity = Vector2.zero;
         }
     }
 }

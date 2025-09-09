@@ -100,10 +100,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tmpHealth: {fileID: 5263233073958564220}
-  _blockData:
-    Type: 1
-    Health: 0
-    Pos: {x: 0, y: 0}
+  _levelManager: {fileID: 0}
+  BlockData:
+    Type: 2
+    Health: 1
+    X: 0
+    Y: 0
 --- !u!61 &5437274960398259901
 BoxCollider2D:
   m_ObjectHideFlags: 0

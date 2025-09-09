@@ -2,26 +2,26 @@ using UnityEngine;
 
 public class BallSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject ballPrefab; // assign in Inspector (prefab)
-    [SerializeField] private Transform spawnPoint;  // assign in Inspector (empty transform)
+    [SerializeField] private GameObject _ballPrefab; // assign in Inspector (prefab)
+    [SerializeField] private Transform _spawnPoint;  // assign in Inspector (empty transform)
 
-    private GameObject currentBall;
+    [SerializeField] private GameObject _currentBall;
 
     void Start()
     {
         var existing = GameObject.FindWithTag("Ball");
         if (existing != null)
         {
-            currentBall = existing;
+            _currentBall = existing;
 
-            var b = currentBall.GetComponent<Ball>();
+            var b = _currentBall.GetComponent<Ball>();
             if (b != null) b.SetReady(true);
             return;
         }
 
-        if (ballPrefab != null)
+        if (_ballPrefab != null)
         {
-            Vector2 pos = spawnPoint != null ? (Vector2)spawnPoint.position : (Vector2)transform.position;
+            Vector2 pos = _spawnPoint != null ? (Vector2)_spawnPoint.position : (Vector2)transform.position;
             SpawnBall(pos);
         }
         else
@@ -32,32 +32,32 @@ public class BallSpawner : MonoBehaviour
 
     private void SpawnBall(Vector2 position)
     {
-        currentBall = Instantiate(ballPrefab, position, Quaternion.identity);
-        currentBall.tag = "Ball"; 
-        var b = currentBall.GetComponent<Ball>();
+        _currentBall = Instantiate(_ballPrefab, position, Quaternion.identity);
+        _currentBall.tag = "Ball"; 
+        var b = _currentBall.GetComponent<Ball>();
         if (b != null) b.SetReady(true);
     }
 
     public void ReadyBall(Vector2 newPosition)
     {
-        if (ballPrefab == null && currentBall == null)
+        if (_ballPrefab == null && _currentBall == null)
         {
             Debug.LogError("BallSpawner: no ballPrefab and no currentBall.");
             return;
         }
 
-        if (currentBall == null)
+        if (_currentBall == null)
         {
             SpawnBall(newPosition);
             return;
         }
 
-        Rigidbody2D rb = currentBall.GetComponent<Rigidbody2D>();
+        Rigidbody2D rb = _currentBall.GetComponent<Rigidbody2D>();
         if (rb != null) rb.velocity = Vector2.zero;
 
-        currentBall.transform.position = newPosition;
+        _currentBall.transform.position = newPosition;
 
-        var ballScript = currentBall.GetComponent<Ball>();
+        var ballScript = _currentBall.GetComponent<Ball>();
         if (ballScript != null) ballScript.SetReady(true);
     }
 }

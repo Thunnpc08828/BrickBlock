@@ -3,6 +3,8 @@ using UnityEngine;
 using Newtonsoft;
 using Newtonsoft.Json;
 using System.IO;
+using System.Collections;
+
 
 public class LevelManager : MonoBehaviour
 {
@@ -10,9 +12,14 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private int _y = 4;
     [SerializeField] private GameObject _blockContainer;
     [SerializeField] private Block _blockPrefab;
+
     [SerializeField] private BlockData[,] _blockDataArray;
     [SerializeField] private LevelData _levelData;
 
+    [SerializeField] private int _currentLevel = 1;
+    [SerializeField] private int _maxLevel = 7;
+
+    public static LevelManager Instance;
 
     [Button]
     public void SpawnBlock()
@@ -47,7 +54,7 @@ public class LevelManager : MonoBehaviour
         for (var i = childCount -1; i >= 0; i--)
         {
             var block = _blockContainer.transform.GetChild(i);
-            DestroyImmediate(block.gameObject);
+            Destroy(block.gameObject);
         }
     }
 
@@ -74,6 +81,7 @@ public class LevelManager : MonoBehaviour
         Debug.Log("Load level: " + level);
 
         DeleteBlock();
+        _currentLevel = level;
 
         var path = Application.dataPath + $"/Resources/LevelData/{level}.json";
         if (!File.Exists(path))
@@ -97,13 +105,11 @@ public class LevelManager : MonoBehaviour
 
         for (int i = 0; i < rows; i++)
         {
-            for (int j = 0; j < cols; j++) 
+            for (int j = 0; j < cols; j++)
             {
-                var data = _blockDataArray[j, i]; 
+                var data = _blockDataArray[j, i];
                 if (data == null || data.Type == BlockType.Empty)
-                {
                     continue;
-                }
 
                 var block = Instantiate(_blockPrefab, _blockContainer.transform);
                 block.Setup(data);
@@ -112,6 +118,32 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        Debug.Log($"Load level {level} total blocks: {cols * rows}");
+        int totalBlocks = _blockContainer.transform.childCount;
+        Debug.Log($"Load level {_currentLevel} total blocks: {totalBlocks}");
+    }
+
+    public void OnBlockDestroyed()
+    {
+        StartCoroutine(CheckBlocksEmpty());
+    }
+
+    private IEnumerator CheckBlocksEmpty()
+    {
+        yield return null; 
+        if (_blockContainer.transform.childCount == 0)
+        {
+            StartCoroutine(GoToNextLevel());
+        }
+    }
+
+    private IEnumerator GoToNextLevel()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        _currentLevel++;
+        if (_currentLevel <= _maxLevel)
+        {
+            LoadLevel(_currentLevel);
+        }
     }
 }

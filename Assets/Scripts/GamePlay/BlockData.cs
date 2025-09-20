@@ -10,8 +10,6 @@ public class BlockData
     public int Health;
     public float X;
     public float Y;
-
-
 }
 
 public enum BlockType
@@ -19,4 +17,5 @@ public enum BlockType
     Empty,
     Normal,
     Bomb,
+    ExtraBall,
 }

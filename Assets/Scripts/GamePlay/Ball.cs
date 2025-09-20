@@ -11,13 +11,7 @@ public class Ball : MonoBehaviour
     [SerializeField] private bool _isAiming = false;
     [SerializeField] private bool _isReady = true;
 
-
-    void Start()
-    {
-
-    }
-
-    void Update()
+    public void Update()
     {
         if (!_isReady) return;
 
@@ -54,7 +48,7 @@ public class Ball : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    public void FixedUpdate()
     {
         // after shot, keep a constant speed
         if (!_isReady && _rb != null && _rb.velocity != Vector2.zero)
@@ -63,7 +57,7 @@ public class Ball : MonoBehaviour
         }
     }
 
-    void ShootBall()
+    public void ShootBall()
     {
         if (_rb == null) _rb = GetComponent<Rigidbody2D>();
         _rb.velocity = _shootDirection * _ballSpeed;

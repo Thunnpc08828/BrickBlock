@@ -62,6 +62,8 @@ public class Ball : MonoBehaviour
         if (_rb == null) _rb = GetComponent<Rigidbody2D>();
         _rb.velocity = _shootDirection * _ballSpeed;
         _isReady = false;
+
+        BallSpawner.GameStarted = true;   
     }
 
     public void SetReady(bool ready)

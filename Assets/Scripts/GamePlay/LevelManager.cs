@@ -1,40 +1,68 @@
-using Sirenix.OdinInspector;
-using UnityEngine;
 using Newtonsoft;
 using Newtonsoft.Json;
-using System.IO;
+using Sirenix.OdinInspector;
 using System.Collections;
-
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] private int _x = 8;  
+    [SerializeField] private int _x = 8;
     [SerializeField] private int _y = 4;
     [SerializeField] private GameObject _blockContainer;
     [SerializeField] private Block _blockPrefab;
-
     [SerializeField] private BlockData[,] _blockDataArray;
     [SerializeField] private LevelData _levelData;
-
     [SerializeField] private int _currentLevel = 1;
-    [SerializeField] private int _maxLevel = 7;
+    [SerializeField] private int _maxLevel = 10;
+    [SerializeField] private Block _boomPrefab;
 
     public static LevelManager Instance;
+
+    private Vector3 _containerStartPos;
+
+    void Start()
+    {
+        if (_blockContainer != null)
+        {
+            _blockContainer.transform.position = new Vector3(-3.5f, 4f, 0f);
+        }
+    }
 
     [Button]
     public void SpawnBlock()
     {
+        if (_blockContainer != null) _blockContainer.transform.position = _containerStartPos;
+
         _blockDataArray = new BlockData[_x, _y];
 
-        for (var i =0;  i< _y; i++)
+        List<BlockType> types = new List<BlockType>();
+        for (int i = 0; i < 30; i++) types.Add(BlockType.Normal);
+        for (int i = 0; i < 2; i++) types.Add(BlockType.Bomb);
+
+        System.Random rnd = new System.Random();
+        for (int i = types.Count - 1; i > 0; i--)
         {
-            for(var j =0; j < _x; j++) 
+            int j = rnd.Next(i + 1);
+            (types[i], types[j]) = (types[j], types[i]);
+        }
+
+        int index = 0;
+        for (var i = 0; i < _y; i++)
+        {
+            for (var j = 0; j < _x; j++)
             {
+                if (index >= types.Count) return;
+                BlockType t = types[index++];
+                Block prefabToUse = _blockPrefab;
+                if (t == BlockType.Bomb) prefabToUse = _boomPrefab;
+
                 var localPos = new Vector2(j, i);
-                var block = Instantiate(_blockPrefab, _blockContainer.transform);
+                var block = Instantiate(prefabToUse, _blockContainer.transform);
                 var blockData = new BlockData
                 {
-                    Type = BlockType.Normal,
+                    Type = t,
                     Health = Random.Range(1, 5),
                     X = i,
                     Y = j,
@@ -50,8 +78,7 @@ public class LevelManager : MonoBehaviour
     private void DeleteBlock()
     {
         var childCount = _blockContainer.transform.childCount;
-
-        for (var i = childCount -1; i >= 0; i--)
+        for (var i = childCount - 1; i >= 0; i--)
         {
             var block = _blockContainer.transform.GetChild(i);
             Destroy(block.gameObject);
@@ -65,8 +92,8 @@ public class LevelManager : MonoBehaviour
         _levelData = new LevelData();
         _levelData.Level = level;
         _levelData.BlockDataArry = _blockDataArray;
-        var json  = JsonConvert.SerializeObject(_levelData);
 
+        var json = JsonConvert.SerializeObject(_levelData);
         var path = Application.dataPath + $"/Resources/LevelData/{level}.json";
         File.WriteAllText(path, json);
 
@@ -79,7 +106,6 @@ public class LevelManager : MonoBehaviour
     private void LoadLevel(int level)
     {
         Debug.Log("Load level: " + level);
-
         DeleteBlock();
         _currentLevel = level;
 
@@ -92,7 +118,6 @@ public class LevelManager : MonoBehaviour
 
         var json = File.ReadAllText(path);
         _levelData = JsonConvert.DeserializeObject<LevelData>(json);
-
         if (_levelData == null || _levelData.BlockDataArry == null)
         {
             Debug.LogError("Error: level data null!");
@@ -108,10 +133,12 @@ public class LevelManager : MonoBehaviour
             for (int j = 0; j < cols; j++)
             {
                 var data = _blockDataArray[j, i];
-                if (data == null || data.Type == BlockType.Empty)
-                    continue;
+                if (data == null || data.Type == BlockType.Empty) continue;
 
-                var block = Instantiate(_blockPrefab, _blockContainer.transform);
+                Block prefabToUse = _blockPrefab;
+                if (data.Type == BlockType.Bomb) prefabToUse = _boomPrefab;
+
+                var block = Instantiate(prefabToUse, _blockContainer.transform);
                 block.Setup(data);
                 block.transform.localPosition = new Vector2(j, i);
                 block.name = $"Block_{j}_{i}";
@@ -129,21 +156,54 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator CheckBlocksEmpty()
     {
-        yield return null; 
+        yield return null;
         if (_blockContainer.transform.childCount == 0)
         {
             StartCoroutine(GoToNextLevel());
         }
     }
-
     private IEnumerator GoToNextLevel()
     {
         yield return new WaitForSeconds(1.5f);
-
-        _currentLevel++;
-        if (_currentLevel <= _maxLevel)
+        if (_currentLevel >= _maxLevel)
         {
-            LoadLevel(_currentLevel);
+            _currentLevel = 1;
         }
+        else
+        {
+            _currentLevel++;
+        }
+        LoadLevel(_currentLevel);
+    }
+    public void MoveBlocksDown(float step = 1f)
+    {
+        if (_blockContainer == null) return;
+
+        _blockContainer.transform.position += Vector3.down * step;
+
+        foreach (Transform child in _blockContainer.transform)
+        {
+            var block = child.GetComponent<Block>();
+            if (block != null && block.BlockData != null)
+            {
+                block.BlockData.Y -= step; 
+            }
+        }
+    }
+    public void Awake()
+    {
+        if (_blockContainer != null) _containerStartPos = _blockContainer.transform.position;
+    }
+
+    public void ResetContainerPosition()
+    {
+        if (_blockContainer != null) _blockContainer.transform.position = _containerStartPos;
+    }
+
+    public void SpawnNextLevel()
+    {
+        DeleteBlock();
+        ResetContainerPosition(); 
+        SpawnBlock();
     }
 }

@@ -6,10 +6,12 @@ public class BallSpawner : MonoBehaviour
     [SerializeField] private GameObject _ballPrefab; // assign in Inspector (prefab)
     [SerializeField] private Transform _spawnPoint;  // assign in Inspector (empty transform)
 
-    [SerializeField] private List<GameObject> _balls = new List<GameObject>(); 
+    [SerializeField] private List<GameObject> _balls = new List<GameObject>();
 
-    private int _ballsReturned = 0; 
-    private Vector2 _lastBallPos;   
+    [SerializeField] private int _ballsReturned = 0;
+    [SerializeField] private Vector2 _lastBallPos;
+
+    public static bool GameStarted = false;
 
     void Start()
     {
@@ -67,14 +69,6 @@ public class BallSpawner : MonoBehaviour
 
         _ballsReturned = 0; 
     }
-
-    public void AddBall()
-    {
-        Vector2 pos = _spawnPoint != null ? (Vector2)_spawnPoint.position : (Vector2)transform.position;
-        SpawnBall(pos);
-        Debug.Log("AddBall: now have " + _balls.Count);
-    }
-
     public void SpawnAndShootBall(Vector2 position, Vector2 direction, int count = 1)
     {
         float baseSpeed = 10f;
@@ -97,7 +91,7 @@ public class BallSpawner : MonoBehaviour
                 }
             }
 
-            _balls.Add(newBall);
+           _balls.Add(newBall);
         }
     }
 

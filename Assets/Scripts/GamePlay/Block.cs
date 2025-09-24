@@ -5,6 +5,7 @@ public class Block : MonoBehaviour
 {
     [SerializeField] private TextMeshPro _tmpHealth;
     [SerializeField] private LevelManager _levelManager;
+
     public BlockData BlockData;
 
     [SerializeField] private bool _isDestroyed = false;
@@ -24,19 +25,7 @@ public class Block : MonoBehaviour
                 if (bombSprite != null) sr.sprite = bombSprite;
             }
         }
-
-        if (BlockData.Type == BlockType.ExtraBall)
-        {
-            var sr = GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                var bonusSprite = Resources.Load<Sprite>("Sprites/extraBall"); 
-                if (bonusSprite != null) sr.sprite = bonusSprite;
-            }
-        }
     }
-
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ball"))
@@ -59,27 +48,6 @@ public class Block : MonoBehaviour
             if (BlockData.Type == BlockType.Bomb)
             {
                 Explode();
-            }
-
-            if (BlockData.Type == BlockType.ExtraBall)
-            {
-                var spawner = FindObjectOfType<BallSpawner>();
-                if (spawner != null)
-                {
-                    Vector2 spawnPos = transform.position;
-                    Vector2 shootDir = Vector2.up;
-
-                    if (collision != null)
-                    {
-                        Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
-                        if (rb != null && rb.velocity != Vector2.zero)
-                        {
-                            shootDir = rb.velocity.normalized;
-                        }
-                    }
-
-                    spawner.SpawnAndShootBall(spawnPos, shootDir, 1);
-                }
             }
 
             if (_levelManager != null)

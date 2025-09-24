@@ -17,5 +17,5 @@ public enum BlockType
     Empty,
     Normal,
     Bomb,
-    ExtraBall,
+    MoreBall,
 }
